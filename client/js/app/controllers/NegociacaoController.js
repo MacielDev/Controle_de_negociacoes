@@ -7,12 +7,13 @@ class NegociacaoController {
     }
     adiciona(event) {
         event.preventDefault();
-        const data = this._inputData.value.split('-').map((item,indice)=> item - indice % 2);
+        
         const negociacao = new Negociacao(
-            new Date(...data),
+            DateHelper.textoParaData(this._inputData.value),
             this._inputQuantidade,
             this._inputValor
         );
         console.log(negociacao);
+        console.log(DateHelper.dataParaTexto(negociacao.data));
     }
 }
