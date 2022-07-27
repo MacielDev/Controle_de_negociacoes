@@ -3,10 +3,12 @@ class View{
         this._elemento = elemento;
     }
 
-    _template(nodel){
+    _template(model){
+
         throw new Error('O método template deve ser implementado');
     }
     update(model){
+        
         this._elemento.innerHTML = this._template(model);
     }
 }
