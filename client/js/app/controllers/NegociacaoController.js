@@ -29,16 +29,16 @@ class NegociacaoController {
     importaNegociacoes() {
         const service = new NegociacaoService();
         Promise.all(
-            [service.obterNegociacaoDaSemana(),
-             service.obterNegociacaoDaSemanaAnterior(),
-             service.obterNegociacaoDaSemanaRetrasada()]
-        ).then (negociacoes => {
-            negociacoes
-            .reduce((arrayUnificadoNegociacoes, cadaArrayNegociacoes) => arrayUnificadoNegociacoes.concat(cadaArrayNegociacoes), [])
-            .forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
-            this._mensagem.texto = 'Negociações importadas com sucesso';
-        })
-        .catch(erro => this._mensagem.texto = erro);
+                [service.obterNegociacaoDaSemana(),
+                    service.obterNegociacaoDaSemanaAnterior(),
+                    service.obterNegociacaoDaSemanaRetrasada()]
+            ).then(negociacoes => {
+                negociacoes
+                    .reduce((arrayUnificadoNegociacoes, cadaArrayNegociacoes) => arrayUnificadoNegociacoes.concat(cadaArrayNegociacoes), [])
+                    .forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
+                this._mensagem.texto = 'Negociações importadas com sucesso';
+            })
+            .catch(erro => this._mensagem.texto = erro);
     }
 
     apaga() {
