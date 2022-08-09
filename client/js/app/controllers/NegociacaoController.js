@@ -28,34 +28,17 @@ class NegociacaoController {
 
     importaNegociacoes() {
         const service = new NegociacaoService();
-        service.obterNegociacaoDaSemana()
-            .then(negociacoes => {
-                negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao))
-                this._mensagem.texto = 'Negociações da semana importadas com sucesso';
-            });
-
-        service.obterNegociacaoDaSemanaAnterior()
-            .then(negociacoes => {
-                negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao))
-                this._mensagem.texto = 'Negociações da semana anterior importadas com sucesso';
-            });
-
-        service.obterNegociacaoDaSemanaRetrasada()
-            .then(negociacoes => {
-                negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao))
-                this._mensagem.texto = 'Negociações da semana retrasada importadas com sucesso';
-            });
-
-
-        // const service = new NegociacaoService();
-        // service. obterNegociacaoDaSemana((erro,negociacoes) => {
-        //     if(erro){
-        //         this._mensagem.texto = erro;
-        //         return;
-        //     }
-        //     negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
-        //     this._mensagem.texto = "Negociações importadas com sucesso";
-        // });
+        Promise.all(
+            [service.obterNegociacaoDaSemana(),
+             service.obterNegociacaoDaSemanaAnterior(),
+             service.obterNegociacaoDaSemanaRetrasada()]
+        ).then (negociacoes => {
+            negociacoes
+            .reduce((arrayUnificadoNegociacoes, cadaArrayNegociacoes) => arrayUnificadoNegociacoes.concat(cadaArrayNegociacoes), [])
+            .forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
+            this._mensagem.texto = 'Negociações importadas com sucesso';
+        })
+        .catch(erro => this._mensagem.texto = erro);
     }
 
     apaga() {
